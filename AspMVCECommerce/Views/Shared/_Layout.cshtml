@@ -1,0 +1,1136 @@
+﻿@using Microsoft.AspNet.Identity;
+@using AspMVCECommerce.Models;
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+    <title>Zaldy's Ecommerce Demo</title>
+
+    <!-- Google font -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
+
+    <!-- Bootstrap -->
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    @*<link type="text/css" rel="stylesheet" href="~/FrontEnd/css/bootstrap.min.css" />*@
+
+    <!-- Slick -->
+    <link type="text/css" rel="stylesheet" href="~/FrontEnd/css/slick.css" />
+    <link type="text/css" rel="stylesheet" href="~/FrontEnd/css/slick-theme.css" />
+
+    <!-- nouislider -->
+    <link type="text/css" rel="stylesheet" href="~/FrontEnd/css/nouislider.min.css" />
+
+    <!-- Font Awesome Icon -->
+    <link rel="stylesheet" href="~/FrontEnd/css/font-awesome.min.css">
+
+    <!-- Custom stlylesheet -->
+    <link type="text/css" rel="stylesheet" href="~/FrontEnd/css/style.css" />
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- custom site css -->
+    <link rel="stylesheet" href="~/Content/Site.css">
+    <link rel="stylesheet" href="~/Content/toastr.min.css">
+</head>
+<body>
+    <!-- HEADER -->
+    <header>
+
+        @{
+            bool isAdmin = false;
+            if (Request.IsAuthenticated)
+            {
+                if (User.IsInRole("Admin"))
+                {
+                    isAdmin = true;
+                }
+            }
+        }
+
+        <!-- TOP HEADER -->
+        <div id="top-header" @(isAdmin ? "style='position:relative;'" : "")>
+            <div class="container">
+                @if (isAdmin)
+                {
+                    <div class="container pull-left" style="position: absolute; left: 0px; width: 220px;">
+                        <ul class="header-links pull-left">
+                            <li><a href="#" style="font-size: 14px;">Running in Admin Mode</a></li>
+
+                        </ul>
+                    </div>
+                }
+
+                <ul class="header-links pull-left">
+                    <li><a href="#"><i class="fa fa-phone"></i> +639969472918</a></li>
+                    <li><a href="#"><i class="fa fa-envelope-o"></i> zaldyjeg.piraman@gmail.com</a></li>
+                    <li><a href="#"><i class="fa fa-map-marker"></i> Malolos City Bulacan</a></li>
+                </ul>
+                @*<ul class="header-links pull-right">
+                    <li><a href="#"><i class="fa fa-dollar"></i> USD</a></li>
+                    <li><a href="#"><i class="fa fa-user-o"></i> My Account</a></li>
+                </ul>*@
+
+                @Html.Partial("_LoginPartial")
+            </div>
+        </div>
+        <!-- /TOP HEADER -->
+        <!-- MAIN HEADER -->
+        <div id="header">
+            <!-- container -->
+            <div class="container">
+                <!-- row -->
+                <div class="row">
+                    <!-- LOGO -->
+                    <div class="col-md-3">
+                        <div class="header-logo">
+                            <a href="~/Home/Index" class="logo">
+                                <img src="~/FrontEnd/img/logo.png" alt="" style="margin-left: -12px; padding-top: 12px;width:320px;">
+                            </a>
+                        </div>
+                    </div>
+                    <!-- /LOGO -->
+                    <!-- SEARCH BAR -->
+                    <div class="col-md-7" style=" padding-left: 40px; padding-right: 40px; ">
+                        <div class="header-search">
+                            <form action="~/Home/Store" method="get" id="form-search">
+                                <select class="input-select" id="dropdownSelectedCategory" name="dropdownSelectedCategory">
+                                    <option value="Categories">All Categories</option>
+                                    <option value="Laptops">Laptops</option>
+                                    <option value="Smartphones">Smartphones</option>
+                                    <option value="Cameras">Cameras</option>
+                                    <option value="Accessories">Accessories</option>
+                                    <option value="Headphones">Headphones</option>
+                                    <option value="Tablet">Tablet</option>
+                                </select>
+
+                                <input type="hidden" class="form-layout-selected-nav-category" name="selectedNavCategory" id="selectedNavCategory" value="Categories" />
+                                <input type="hidden" class="form-layout-selected-category" name="selectedCategory" id="selectedCategory" value="1,2,3,4,5,6" />
+
+                                <input class="input form-layout-search-products" placeholder="Search product here" id="searchProducts" name="searchProducts" />
+
+
+                                <input type="submit" class="search-btn" id="btn-product-search"></input>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- /SEARCH BAR -->
+                    <!-- ACCOUNT -->
+                    <div class="col-md-2 clearfix">
+                        <div class="header-ctn" style="display: inline-flex; padding-top: 20px;">
+                            <!-- Wishlist -->
+                            <div>
+                                <a href="~/Home/WishList">
+                                    <i class="fa fa-heart-o"></i>
+                                    <span>My Wishlist</span>
+
+                                    @if (Request.IsAuthenticated)
+                                    {
+                                        if (User.IsInRole("Customer"))
+                                        {
+                                            string CustomerId = Microsoft.AspNet.Identity.IdentityExtensions.GetUserId(User.Identity);
+                                            ApplicationDbContext db = new ApplicationDbContext();
+                                            var wishListCount = db.WishLists.Where(w => w.CustomerId == CustomerId).ToList().Count(); ;
+                                            <div id="my-wishlist-count" class="qty">@wishListCount</div>
+                                        }
+                                        else
+                                        {
+                                            <div id="my-wishlist-count" class="qty">0</div>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <div id="my-wishlist-count" class="qty">0</div>
+                                    }
+
+                                </a>
+                            </div>
+                            <!-- /Wishlist -->
+                            <!-- Cart -->
+                            <div class="dropdown">
+
+                                @if (Request.IsAuthenticated)
+                                {
+                                    if (User.IsInRole("Customer"))
+                                    {
+                                        <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                                            <i class="fa fa-shopping-cart"></i>
+                                            <span>My Cart</span>
+                                            <div class="qty" id="shopping-cart-items-count">0</div>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a href="~/Account/Login">
+                                            <i class="fa fa-shopping-cart"></i>
+                                            <span>My Cart</span>
+                                            <div class="qty" id="shopping-cart-items-count">0</div>
+                                        </a>
+                                    }
+                                }
+                                else
+                                {
+                                    <a href="~/Account/Login">
+                                        <i class="fa fa-shopping-cart"></i>
+                                        <span>My Cart</span>
+                                        <div class="qty" id="shopping-cart-items-count">0</div>
+                                    </a>
+                                }
+
+
+
+                                <div class="cart-dropdown">
+                                    <div class="cart-list" id="my-cart-list">
+                                        @*<div class="product-widget">
+                                            <div class="product-img">
+                                                <img src="~/FrontEnd/img/product01.png" alt="">
+                                            </div>
+                                            <div class="product-body">
+                                                <h3 class="product-name"><a href="#">product name goes here</a></h3>
+                                                <h4 class="product-price"><span class="qty">1x</span>$980.00</h4>
+                                            </div>
+                                            <button class="delete"><i class="fa fa-close"></i></button>
+                                        </div>
+
+                                        <div class="product-widget">
+                                            <div class="product-img">
+                                                <img src="~/FrontEnd/img/product02.png" alt="">
+                                            </div>
+                                            <div class="product-body">
+                                                <h3 class="product-name"><a href="#">product name goes here</a></h3>
+                                                <h4 class="product-price"><span class="qty">3x</span>$980.00</h4>
+                                            </div>
+                                            <button class="delete"><i class="fa fa-close"></i></button>
+                                        </div>*@
+                                    </div>
+                                    <div class="cart-summary">
+                                        <small id="cart-summary-selected-items">0 Item(s) selected</small>
+                                        <h5 id="cart-summary-subtotal">SUBTOTAL: $0.00</h5>
+                                    </div>
+                                    <div class="cart-btns">
+                                        <a href="~/Home/ShoppingCart">View Cart</a>
+                                        <a href="~/Home/CheckOut">Checkout  <i class="fa fa-arrow-circle-right"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /Cart -->
+                            <!-- Menu Toogle -->
+                            <div class="menu-toggle">
+                                <a href="#">
+                                    <i class="fa fa-bars"></i>
+                                    <span>Menu</span>
+                                </a>
+                            </div>
+                            <!-- /Menu Toogle -->
+                        </div>
+                    </div>
+                    <!-- /ACCOUNT -->
+                </div>
+                <!-- row -->
+            </div>
+            <!-- container -->
+        </div>
+        <!-- /MAIN HEADER -->
+    </header>
+    <!-- /HEADER -->
+    <!-- NAVIGATION -->
+    <nav id="navigation">
+        <!-- container -->
+        <div class="container">
+            <!-- responsive-nav -->
+            <div id="responsive-nav">
+                <!-- NAV -->
+                <ul class="main-nav nav navbar-nav">
+
+                    <li><a href="~/Home/Index" class="link-nav-bar">Home</a></li>
+                    @if (User.IsInRole("Admin"))
+                    {
+        <li><a href="~/Manage" class="link-nav-bar">Account</a></li>
+                        <li><a href="~/Products/Index" class="link-nav-bar">Manage Product</a></li>
+}
+
+                    <li><a class="link-nav-bar" href="~/Home/Store?selectedCategory=1%2C2%2C3%2C4%2C5%2C6&selectedNavCategory=Hot%20Deals">Hot Deals</a></li>
+                    <li><a class="link-nav-bar" href="~/Home/Store?selectedCategory=1%2C2%2C3%2C4%2C5%2C6&selectedNavCategory=Categories">Categories</a></li>
+                    <li><a class="link-nav-bar" href="~/Home/Store?selectedCategory=1&selectedNavCategory=Laptops">Laptops</a></li>
+                    <li><a class="link-nav-bar" href="~/Home/Store?selectedCategory=2&selectedNavCategory=Smartphones">Smartphones</a></li>
+                    <li><a class="link-nav-bar" href="~/Home/Store?selectedCategory=5&selectedNavCategory=Cameras">Cameras</a></li>
+                    <li><a class="link-nav-bar" href="~/Home/Store?selectedCategory=3&selectedNavCategory=Accessories">Accessories</a></li>
+                    <li><a class="link-nav-bar" href="~/Home/Store?selectedCategory=4&selectedNavCategory=Headphones">Headphones</a></li>
+                    <li><a class="link-nav-bar" href="~/Home/Store?selectedCategory=6&selectedNavCategory=Tablet">Tablet</a></li>
+                </ul>
+                <!-- /NAV -->
+            </div>
+            <!-- /responsive-nav -->
+        </div>
+        <!-- /container -->
+    </nav>
+    <!-- /NAVIGATION -->
+
+
+    @RenderBody()
+
+
+
+    <!-- NEWSLETTER -->
+    <div id="newsletter" class="section">
+        <!-- container -->
+        <div class="container">
+            <!-- row -->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="newsletter">
+                        <p>Sign Up for the <strong>NEWSLETTER</strong></p>
+                        <form id="newsletter-form">
+                            <input class="input" type="email" id="newsletter-email" placeholder="Enter Your Email">
+                            <button class="newsletter-btn" id="newsletter-btn"><i class="fa fa-envelope"></i> Subscribe</button>
+                        </form>
+                        <ul class="newsletter-follow">
+                            <li>
+                                <a href="https://www.facebook.com/"><i class="fa fa-facebook"></i></a>
+                            </li>
+                            <li>
+                                <a href="https://twitter.com/?lang=en"><i class="fa fa-twitter"></i></a>
+                            </li>
+                            <li>
+                                <a href="https://www.instagram.com/?hl=en"><i class="fa fa-instagram"></i></a>
+                            </li>
+                            <li>
+                                <a href="https://www.pinterest.com/"><i class="fa fa-pinterest"></i></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- /row -->
+        </div>
+        <!-- /container -->
+    </div>
+    <!-- /NEWSLETTER -->
+    <!-- MODAL CODE ZALDY -->
+
+
+
+    <div class="container">
+
+        <!-- Modal -->
+        <div class="modal fade" id="myModal" role="dialog">
+            <div class="modal-dialog" style="width:400px;">
+
+                <!-- Modal content-->
+                <div class="modal-content" style="border-radius: 0px;">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">ADD TO CART</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12">
+
+                                <div id="modal-product-id" style="display:none;" hidden></div>
+                                <div class="product-widget">
+                                    <div class="product-img" style="width: 70px; height: 60px; padding: 4px;">
+                                        <img style="width: 100%; height: 60px; object-fit: scale-down;" id="modal-product-image" src="~/FrontEnd/img/product06.png" alt="">
+                                    </div>
+                                    <div class="product-body">
+                                        <p class="product-category" id="modal-product-category">Category</p>
+                                        <h3 class="product-name"><a href="" id="modal-product-name">product name goes here</a></h3>
+                                        <h4 class="product-price" id="modal-product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+
+
+                        <div class="row" style="font-size:12px !important;">
+                            <div class="col-md-12">
+                                <table style="width:100%">
+                                    <tr>
+                                        <td style="width:75px;text-align:right;padding-right:17px;">Size</td>
+                                        <td style="height:40px;line-height:34px">
+                                            <select class="input-select" style="height: 34px; width: 90%;text-transform:uppercase;" id="modal-product-sizes">
+                                                <option value="0">X</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width:75px;text-align:right;padding-right:17px;">Color</td>
+                                        <td style="height:40px;line-height:34px">
+                                            <select class="input-select" style="height: 34px; width: 90%; text-transform: uppercase;" id="modal-product-colors">
+                                                <option value="0">Red</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width:75px;text-align:right;padding-right:17px;">Qty</td>
+                                        <td style="height:40px;line-height:34px">
+                                            <div class="input-number" style="height: 34px; line-height: 34px; width: 40%;">
+                                                <input type="number" value="1" style="height:34px;line-height:34px;" id="modal-product-quantity"  min="1" max="1">
+                                                <span class="qty-up" style="height:17px;line-height:17px;">+</span>
+                                                <span class="qty-down" style="height:17px;line-height:17px;">-</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+
+                        <button type="button" id="modal-product-add-btn" class="btnx btn-default modal-product-add-btn" style="width: 85px; height: 34px; background-color: #D10024; border-color: #D10024; color: #FFF; opacity: 0.8;">Add</button>
+                        <button type="button" class="btnx btn-default" style="width: 85px; height: 34px;" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+    <!-- MODAL CODE ZALDY END -->
+    <!-- FOOTER -->
+    <footer id="footer">
+        <!-- top footer -->
+        <div class="section">
+            <!-- container -->
+            <div class="container">
+                <!-- row -->
+                <div class="row">
+
+                    <div class="col-md-3 col-xs-6">
+                        <div class="footer">
+                            <h3 class="footer-title">About Us</h3>
+                            <p>Welcome to Zaldy's Ecommerce, your number one source for all things electronic. We're dedicated to giving you the very best of electronics product, with a focus on Laptop's, Smart Phones, Tablet's, Accessories And Headphones.</p>
+                            <ul class="footer-links">
+                                <li><a href="#"><i class="fa fa-map-marker"></i>Malolos City Bulacan</a></li>
+                                <li><a href="#"><i class="fa fa-phone"></i>+639969472918</a></li>
+                                <li><a href="#"><i class="fa fa-envelope-o"></i>zaldyjeg.piraman@gmail.com</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+
+
+                    <div class="col-md-3 col-xs-6">
+                        <div class="footer">
+                            <h3 class="footer-title">Categories</h3>
+                            <ul class="footer-links">
+                                <li><a href="~/Home/Store?selectedCategory=1%2C2%2C3%2C4%2C5%2C6&selectedNavCategory=Hot%20Deals">Hot deals</a></li>
+                                <li><a href="~/Home/Store?selectedCategory=1&selectedNavCategory=Laptops">Laptops</a></li>
+                                <li><a href="~/Home/Store?selectedCategory=2&selectedNavCategory=Smartphones">Smartphones</a></li>
+                                <li><a href="~/Home/Store?selectedCategory=5&selectedNavCategory=Cameras">Cameras</a></li>
+                                <li><a href="~/Home/Store?selectedCategory=3&selectedNavCategory=Accessories">Accessories</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="clearfix visible-xs"></div>
+
+                    <div class="col-md-3 col-xs-6">
+                        <div class="footer">
+                            <h3 class="footer-title">Information</h3>
+                            <ul class="footer-links">
+                                <li><a href="~/Home/About">About Us</a></li>
+                                <li><a href="~/Home/Contact">Contact Us</a></li>
+                                <li><a href="~/Home/PrivacyPolicy">Privacy Policy</a></li>
+                                <li><a href="~/Home/Order">Orders and Returns</a></li>
+                                <li><a href="~/Home/TermsAndCondition">Terms & Conditions</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 col-xs-6">
+                        <div class="footer">
+                            <h3 class="footer-title">Service</h3>
+                            <ul class="footer-links">
+                                <li><a href="~/Manage">My Account</a></li>
+
+
+                                @if (Request.IsAuthenticated)
+                                {
+                                    if (User.IsInRole("Customer"))
+                                    {
+                                        <li><a href="~/Home/ShoppingCart">View Cart</a></li>
+                                        <li><a href="~/Home/WishList">Wishlist</a></li>
+                                        <li><a href="~/Home/Order">Track My Order</a></li>
+                                    }
+                                    else
+                                    {
+                                        <li><a href="~/Account/Login">View Cart</a></li>
+                                        <li><a href="~/Account/Login">Wishlist</a></li>
+                                        <li><a href="~/Account/Login">Track My Order</a></li>
+                                    }
+                                }
+                                else
+                                {
+                                    <li><a href="~/Account/Login">View Cart</a></li>
+                                    <li><a href="~/Account/Login">Wishlist</a></li>
+                                    <li><a href="~/Account/Login">Track My Order</a></li>
+                                }
+
+                                <li><a href="~/Home/Help">Help</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- /row -->
+            </div>
+            <!-- /container -->
+        </div>
+        <!-- /top footer -->
+        <!-- bottom footer -->
+        <div id="bottom-footer" class="section">
+            <div class="container">
+                <!-- row -->
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <ul class="footer-payments">
+                            <li><a href="#"><i class="fa fa-cc-visa"></i></a></li>
+                            <li><a href="#"><i class="fa fa-credit-card"></i></a></li>
+                            <li><a href="#"><i class="fa fa-cc-paypal"></i></a></li>
+                            <li><a href="#"><i class="fa fa-cc-mastercard"></i></a></li>
+                            <li><a href="#"><i class="fa fa-cc-discover"></i></a></li>
+                            <li><a href="#"><i class="fa fa-cc-amex"></i></a></li>
+                        </ul>
+                        <span class="copyright">
+                            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                            Copyright &copy;
+                            <script>document.write(new Date().getFullYear());</script> All rights reserved | Developed by: <a style="color: #c1c1c1;" href="http://zaldypiraman2015.wixsite.com/porfolio" target="_blank">Zaldy Jeg Piraman</a>
+                            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                        </span>
+                    </div>
+                </div>
+                <!-- /row -->
+            </div>
+            <!-- /container -->
+        </div>
+        <!-- /bottom footer -->
+    </footer>
+    <!-- /FOOTER -->
+    <!-- jQuery Plugins -->
+    <script src="~/FrontEnd/js/jquery.min.js"></script>
+    <script src="~/FrontEnd/js/bootstrap.min.js"></script>
+    <script src="~/FrontEnd/js/slick.min.js"></script>
+    <script src="~/FrontEnd/js/nouislider.min.js"></script>
+    <script src="~/FrontEnd/js/jquery.zoom.min.js"></script>
+    <script src="~/FrontEnd/js/main.js"></script>
+    <script type="text/javascript" src="~/Scripts/toastr.min.js"></script>
+
+    @RenderSection("scripts", required: false)
+
+
+
+<script type="text/javascript">
+
+        function isNewsLetterEmail(email) {
+            var regex = /^([a-zA-Z0-9_.+-])+\@@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+            return regex.test(email);
+        }
+
+       // MODAL ADD PRODUCT TO CART
+        function ModalAddToCart() {
+            var baseUrl = '@Url.Content("~/")';
+            var tempModalProductPriceHtmlStringResult = $.strRemove2("del", '<div>' + $('#modal-product-price').html() + '</div>') ;
+
+            $.post(baseUrl + 'api/LineItem/AddLineItem',
+                {
+                    LineItemId: 0,
+                    Quantity: $("#modal-product-quantity").val(),
+                    TotalPrice: parseInt($(tempModalProductPriceHtmlStringResult).text().trim().replace('₱', '').replaceAll(',', '')) * parseInt($("#modal-product-quantity").val()),
+                    ProductId: parseInt($('#modal-product-id').text()),
+                    SizeId: $('#modal-product-sizes').val() == 0 ? null : $('#modal-product-sizes').val(),
+                    ColorId: $('#modal-product-colors').val() == 0 ? null : $('#modal-product-colors').val(),
+                        ShoppingCartId: 0
+                    })
+                    .done(function () {
+
+                        // NAVIGATE TO SHOPPING CART PAGE CODE HERE
+                        GetLineItems();
+                        //$('#myModal').modal('toggle');
+
+                        toastr.success('The <strong>Product</strong> record has been successfully added to shopping cart.', 'Record Added.');
+                    })
+                    .fail(function (xhr) {
+                        toastr.error('The <strong>Product</strong> saving failed due to: ' + xhr.responseText, 'Record Add Failed.');
+                    });
+
+                //e.preventDefault();
+
+        }
+        // END OF MODAL ADD PRODUCT TO CART
+
+
+
+        // WISH LIST VARIABLE -----------------------
+
+        var wishListBaseUrl = '@Url.Content("~/")';
+        var tempUserId = '';
+
+        @if (Request.IsAuthenticated)
+        {
+            if (User.IsInRole("Customer")) {
+                <text>
+                    tempUserId = '@(Microsoft.AspNet.Identity.IdentityExtensions.GetUserId(User.Identity))';
+                </text>
+            }
+        }
+        // END WISH LIST VARIABLE -----------------------
+
+
+        // ADD PRODUCT TO WISH LIST -----------------------
+    function AddToWishList(e, productId, wishListBtnType) {
+        //var removeWishListHtmlTemplateButton = '<button id="remove-to-wishlist-' + productId.toString() + '" onclick="RemoveToWishList(event,\'' + productId.toString() + '\',\'button\');" class="add-to-wishlist"><i id="i-remove-to-wishlist-' + productId.toString() + '" class="fa fa-heart" style="color: #D10024;"></i><span class="tooltipp">remove to wishlist</span></button>' +
+        //        '< button class="add-to-compare" ><i class="fa fa-exchange"></i><span class="tooltipp tooltipp2">compare with similar items</span></button >' + 
+        //        '<button class="quick-view" onclick="location.href=\'/Home/Product?productId=' + productId.toString() + '&amp;selectedNavCategory=Home\'"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>' +
+        //        '</div >';
+        //var removeWishListHtmlTemplateList = '<li><a href="#" id="remove-to-wishlist-' + productId.toString() + '" onclick="RemoveToWishList(event,\'' + productId.toString() + '\',\'list\');"><i id="i-remove-to-wishlist-' + productId.toString() + '" class="fa fa-heart" style="color: #D10024;"></i> remove to wishlist</a></li>';
+
+        var removeWishListHtmlTemplateButton = '<button id=\'remove-to-wishlist-' + productId.toString() + '\' onclick="RemoveToWishList(event, \'' + productId.toString() + '\',\'button\');" class=\'add-to-wishlist\' > <i id=\'i-remove-to-wishlist-' + productId.toString() + '\' class= \'fa fa-heart\' style =\'color: #D10024;\' ></i > <span class=\'tooltipp\'>remove to wishlist</span></button>' +
+                '<button class="add-to-compare"><i class=\'fa fa-exchange\'></i><span class=\'tooltipp\'>add to compare</span></button >' +
+        '<button class="quick-view" onclick=\'location.href ="/Home/Product?productId=' + productId.toString() + '&amp;selectedNavCategory=Home"\'><i class=\'fa fa-eye\'></i><span class=\'tooltipp\'>quick view</span></button>' +
+                '</div>';
+        var removeWishListHtmlTemplateList = '<li><a href="#" id="remove-to-wishlist-' + productId.toString() + '" onclick="RemoveToWishList(event, \'' + productId.toString() + '\',\'list\');" > <i id="i-remove-to-wishlist-' + productId.toString() + '" class="fa fa-heart" style="color: #D10024;"></i> remove to wishlist</a></li>';
+
+
+        var _wishListBtnType = wishListBtnType;
+            
+            $.post(wishListBaseUrl + 'api/WishList/AddWishList',
+                {
+                    ProductId: productId,
+                    CustomerId: tempUserId
+                })
+                .done(function (response) {
+
+                    if (_wishListBtnType == 'list') {
+                        $('#li-wislist-' + productId.toString()).html(removeWishListHtmlTemplateList);
+                    }
+                    else {
+                        $('.div-wislist-' + productId.toString()).each(function () {
+                            $(this).html(removeWishListHtmlTemplateButton);
+                        });
+                        
+                    }
+
+                    $('#my-wishlist-count').text(response.count);
+
+                    toastr.success('The <strong>Product</strong> has been successfully added to wish list.', 'Record Added.');
+                })
+                .fail(function (xhr) {
+
+                    toastr.error('The <strong>Product</strong> add to wish list saving failed due to:  ' + xhr, 'Record Add Failed.');
+
+                });
+
+            e.preventDefault();
+        }
+        // END OF ADD PRODUCT TO WISH LIST -----------------------
+
+        // REMOVE PRODUCT TO WISH LIST -----------------------
+        function RemoveToWishList(e, productId, wishListBtnType) {
+
+            //var addWishListHtmlTemplateButton = '<button id="add-to-wishlist-' + productId.toString() + '" onclick="AddToWishList(event,\'' + productId.toString() + '\',\'button\');" class="add-to-wishlist"><i id="i-add-to-wishlist-' + productId.toString() + '" class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>' +
+            //    '<button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp tooltipp2">compare with similar items</span></button>' +
+            //    '< button class="quick-view" onclick = "location.href=\'/Home/Product?productId=' + productId.toString() + '&amp;selectedNavCategory=Home\'" ><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button > ';
+
+            //var addWishListHtmlTemplateList = '<li><a href="#" id="add-to-wishlist-' + productId.toString() + '" onclick="AddToWishList(event,\'' + productId.toString() + '\',\'list\');"><i id="i-add-to-wishlist-' + productId.toString() + '" class="fa fa-heart-o"></i> add to wishlist</a></li>'
+
+            var addWishListHtmlTemplateButton = '<button id=\'add-to-wishlist-' + productId.toString() + '\' onclick="AddToWishList(event, \'' + productId.toString() + '\',\'button\');" class= \'add-to-wishlist\' > <i id=\'i-add-to-wishlist-' + productId.toString() + '\' class=\'fa fa-heart-o\' ></i><span class=\'tooltipp\'>add to wishlist</span></button>' +
+                '<button class="add-to-compare"><i class=\'fa fa-exchange\'></i><span class=\'tooltipp\'>add to compare</span></button>' +
+                '<button class="quick-view" onclick=\'location.href="/Home/Product?productId=' + productId.toString() + '&amp;selectedNavCategory=Home"\' ><i class=\'fa fa-eye\'></i><span class=\'tooltipp\'>quick view</span></button>';
+
+            var addWishListHtmlTemplateList = '<li><a href="#" id="add-to-wishlist-' + productId.toString() + '" onclick="AddToWishList(event, \'' + productId.toString() + '\',\'list\');" > <i id="i-add-to-wishlist-' + productId.toString() + '" class="fa fa-heart-o"></i> add to wishlist</a></li>';
+
+
+
+            var _wishListBtnType = wishListBtnType;
+
+
+          
+
+            $.post(wishListBaseUrl + 'api/WishList/RemoveWishList',
+                {
+                    ProductId: productId,
+                    CustomerId: tempUserId
+                })
+                .done(function (response) {
+                    if (_wishListBtnType == 'list') {
+                        $('#li-wislist-' + productId.toString()).html(addWishListHtmlTemplateList);
+                    }
+                    else {
+              
+                        $('.div-wislist-' + productId.toString()).each(function () {
+                            $(this).html(addWishListHtmlTemplateButton);
+                        });
+                    }
+
+                    $('#my-wishlist-count').text(response.count);
+
+                    toastr.success('The <strong>Product</strong> has been successfully remove to wish list.', 'Record Removed.');
+                })
+                .fail(function (xhr) {
+              
+                    toastr.error('The <strong>Product</strong> remove to wish list saving failed due to:  ' + xhr, 'Record Remove Failed.');
+
+                });
+
+            e.preventDefault();
+        }
+        // END OF REMOVE PRODUCT TO WISH LIST -----------------------
+
+
+
+       // DELETE LINE ITEM
+        function DeleteLineItem(lineItemId) {
+
+                var _baseUrl = '@Url.Content("~/")';
+
+                $.ajax({
+                    url: _baseUrl + 'api/LineItem/DeleteLineItem?lineItemId=' + lineItemId,
+                    type: "get", //send it through get method
+                    success: function (response) {
+
+                        //location.href = window.location.href;
+                        window.location.reload(true);
+
+                    },
+                    error: function (xhr) {
+                        var err = eval("(" + xhr.responseText + ")");
+                        toastr.error('Deleting <strong>Line Item</strong> failed due to: ' + err +  'Record Delete Failed.');
+                    }
+                });
+
+        }
+        // -- END OF DELETE LINE ITEM
+
+
+
+        // GET SHOPPING CART LINEITEMS
+
+
+        function GetLineItems() {
+
+                var _baseUrl = '@Url.Content("~/")';
+
+                $.ajax({
+                    url: _baseUrl + 'api/LineItem/GetLineItemsOfCurrentUser',
+                    type: "get", //send it through get method
+                    success: function (response) {
+
+                        $("#my-cart-list").html("");
+                        var count = Object.keys(response.lineItemViewDTOList).length;
+                        var subTotal = 0;
+                        for (var i = 0; i < count; i++) {
+                            subTotal = subTotal + parseInt(response.lineItemViewDTOList[i].TotalPrice);
+                            let cartItemTemplate = '<div class="product-widget" id="' + response.lineItemViewDTOList[i].LineItemId + '">' +
+                                                    '<div class="product-img" style="width: 70px; height: 60px; padding: 4px;" >' +
+                                '<img style="width: 100%; height: 60px; object-fit: scale-down;" src="' + _baseUrl + response.lineItemViewDTOList[i].ImagePath.replace('~/','') + '" alt="">' +
+                                                    '</div>' +
+                                                    '<div class="product-body">' +
+                                '<h3 class="product-name product-namex"><a href="/Home/Product?productId=' + response.lineItemViewDTOList[i].ProductId + '&selectedNavCategory=Home' + '" id="' + response.lineItemViewDTOList[i].ProductId + '">' +
+                                                                                            response.lineItemViewDTOList[i].ProductName + '</a></h3>' +
+                                                    '<h4 class="product-price"><span class="qty">' + response.lineItemViewDTOList[i].Quantity + 'x</span>' +
+                               '₱' + parseInt(response.lineItemViewDTOList[i].TotalPrice).toLocaleString('en', { useGrouping: true }) + '</h4>' +
+                                                    '</div>' +
+                                '<button class="delete cart-items-delete" id="' + response.lineItemViewDTOList[i].LineItemId + '"><i class="fa fa-close"></i></button>' +
+                                                    '</div >';
+
+                            $("#my-cart-list").append(cartItemTemplate);
+                        }
+
+                        $("#shopping-cart-items-count").text(count.toString());
+                        $("#cart-summary-selected-items").text(count.toString() + " Item(s) selected");
+
+                        $("#cart-summary-subtotal").text('SUBTOTAL: ₱' + subTotal.toLocaleString('en', { useGrouping: true }) );
+                        // LINEITEM DELETE SUCCESSFULL
+                        $(".cart-items-delete").click(function () {
+                            DeleteLineItem($(this).attr("id"));
+
+                        });
+                    },
+                    error: function (xhr) {
+                        var err = eval("(" + xhr.responseText + ")");
+                        toastr.error('Deleting <strong>Line Item</strong> failed due to: ' + err +  'Record Delete Failed.');
+                    }
+                });
+
+        }
+        // -- END OF GET SHOPPING CART LINEITEMS
+
+
+
+
+            // GET PRODUCT DETAILS BY ID
+
+
+        function GetProductDetails(productId) {
+
+                var _baseUrl = '@Url.Content("~/")';
+
+                $.ajax({
+                    url: _baseUrl + 'api/ProductsWA/GetProductDetails?productId=' + productId,
+                    type: "get", //send it through get method
+                    success: function (response) {
+                        //ProductId
+                        //Stock
+                        //OriginalPrice
+                        //DiscountedPrice
+                        //ProductName
+                        //Sizes
+                        //Colors
+                        //ImagePath
+
+                        //productDTO:
+
+                        //IsPromo: true
+                        var colorsCount = Object.keys(response.productDTO.Colors).length;
+                        var sizesCount = Object.keys(response.productDTO.Sizes).length;
+
+
+
+
+                        if (sizesCount == 0) {
+                            $("#modal-product-sizes").html('<option value="0">DEFAULT</option>');
+                        }
+                        else {
+                            $("#modal-product-sizes").html("");
+                        }
+
+
+
+                        if (colorsCount == 0) {
+                            $("#modal-product-colors").html('<option value="0">DEFAULT</option>');
+                        }
+                        else {
+                            $("#modal-product-colors").html("");
+                        }
+
+
+                        for (let i = 0; i < colorsCount; i++) {
+                            $("#modal-product-colors").append('<option value="' + response.productDTO.Colors[i].ColorId  + '">' + response.productDTO.Colors[i].Name + '</option>');
+                        }
+
+                        for (let i = 0; i < sizesCount; i++) {
+                            $("#modal-product-sizes").append('<option value="' + response.productDTO.Sizes[i].SizeId + '">' + response.productDTO.Sizes[i].Name + '</option>');
+                        }
+
+
+                        $('#modal-product-name').attr('href', "/Home/Product?productId=" + productId + "&selectedNavCategory=@ViewBag.SelectedNavCategory");
+                        $('#modal-product-id').text(response.productDTO.ProductId);
+                        $('#modal-product-name').text(response.productDTO.ProductName);
+                        $('#modal-product-category').text(response.productDTO.Brand + ' ' + response.productDTO.Category);
+
+
+                        $('#modal-product-image').attr('src', _baseUrl + response.productDTO.ImagePath.replace('~/', '') );
+
+                        if (response.productDTO.IsPromo) {
+                            $('#modal-product-price').html('₱' + parseInt(response.productDTO.DiscountedPrice).toLocaleString() + ' <del class="product-old-price">₱' + parseInt(response.productDTO.OriginalPrice).toLocaleString() + '</del>');
+                        }
+                        else {
+                            $('#modal-product-price').html('₱' + parseInt(response.productDTO.OriginalPrice).toLocaleString());
+                        }
+
+
+                        $("#modal-product-quantity").val(1);
+                        if (parseInt(response.productDTO.Stock) == 0) {
+                            $("#modal-product-quantity").val(0);
+                        }
+
+                        $("#modal-product-quantity").attr("max", parseInt(response.productDTO.Stock));
+
+
+
+                        // VALIDATE QUANTITY BASE ON PRODUCT CURRENT STOCK
+                        if (parseInt($("#modal-product-quantity").attr("max")) == 0) {
+                            $("#modal-product-quantity").val(0);
+
+                        }
+
+                        $("#modal-product-quantity").change(function (e) {
+                            if (parseInt($(this).val()) > parseInt($(this).attr("max"))) {
+                                $(this).val(parseInt($(this).attr("max")));
+                            }
+
+                            if (parseInt($(this).val()) < parseInt($(this).attr("min"))) {
+                                $(this).val(parseInt($(this).attr("min")));
+                            }
+
+                        });
+
+                        $("#modal-product-quantity").keypress(function (event) {
+                            if (event.keyCode == 46) {
+                                event.preventDefault();
+                            }
+                        });
+
+                        // END OF VALIDATE
+
+
+
+                        $('#myModal').modal('show');
+                    },
+                    error: function (xhr) {
+                        var err = eval("(" + xhr.responseText + ")");
+                        toastr.error('Loading <strong>Product Details</strong> failed due to: ' + err +  'Record Loading Failed.');
+                    }
+                });
+
+        }
+        // -- END OF GET PRODUCT DETAILS BY ID
+
+
+        $(document).ready(function () {
+            @{
+
+               <text>
+                    var tempNavCategory = '@ViewBag.SelectedNavCategory';
+                    var tempSearchProducts = '@ViewBag.SearchProducts';
+               </text>
+            }
+
+            // Display an info toast with no title
+            toastr.options = {
+                "closeButton": false,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": true,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "1000",
+                "hideDuration": "1000",
+                "timeOut": "10000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            }
+
+            $(".form-layout-search-products").val(tempSearchProducts);
+
+            $("#dropdownSelectedCategory").change(function () {
+
+                var selectedNavCategory = '';
+                var selectedCategory = '';
+
+                switch ($(this).val()) {
+                    case "Categories":
+                        selectedNavCategory = "Categories";
+                        selectedCategory = "1,2,3,4,5,6";
+                        break;
+                    case "Laptops":
+                        selectedCategory = "1";
+                        selectedNavCategory = "Laptops";
+                        break;
+                    case "Smartphones":
+                        selectedCategory = "2"
+                        selectedNavCategory = "Smartphones";
+                        break;
+                    case "Cameras":
+                        selectedCategory = "5";
+                        selectedNavCategory = "Cameras";
+                        break;
+                    case "Accessories":
+                        selectedCategory = "3";
+                        selectedNavCategory = "Accessories";
+                        break;
+                    case "Headphones":
+                        selectedCategory = "4";
+                        selectedNavCategory = "Headphones";
+                        break;
+                    case "Tablet":
+                        selectedCategory = "6";
+                        selectedNavCategory = "Tablet"
+                        break;
+                    default:
+                        selectedCategory = "";
+                        selectedNavCategory = "~/Home/Index";
+                }
+
+                $(".form-layout-selected-nav-category").val(selectedNavCategory);
+                $(".form-layout-selected-category").val(selectedCategory);
+            });
+
+
+
+            $(".link-nav-bar").each(function (index) {
+                $(this).parent().removeClass("active");
+                tempNavCategory = tempNavCategory == '' ? 'Home' : tempNavCategory;
+                if ($(this).text().toUpperCase() == tempNavCategory.toUpperCase()) {
+                    $(this).parent().addClass("active");
+                    //$('#selectedNavCategory').val(tempNavCategory);
+                }
+            });
+
+
+
+            //$(".link-nav-bar").click(function () {
+            //    $(".link-nav-bar").each(function (index) {
+            //        $(this).parent().removeClass("active")
+            //    });
+            //    alert($(this).text());
+            //    $(this).parent().addClass("active")
+            //});
+
+            @if (Request.IsAuthenticated)
+            {
+
+                    if (User.IsInRole("Customer"))
+                    {
+                          <Text>
+                            GetLineItems();
+                          </Text>
+                    }
+
+
+
+            }
+
+
+
+            $("#modal-product-add-btn").click(function () {
+                ModalAddToCart();
+                $('#myModal').modal('hide');
+            });
+
+
+
+
+            // REMOVE HTML ELEMENT FROM HTMLSTRING
+            $.strRemove2 = function (theTarget, theString) {
+                return $("<div/>").append(
+                    $(theTarget, theString).remove().end()
+                ).html();
+            };
+
+
+
+            // -- ADD NEWSLETTER ---
+            var newsletterBaseUrl = '@Url.Content("~/")';
+            $("#newsletter-form").submit(function (e) {
+                e.preventDefault();
+            });
+
+            $("#newsletter-btn").click(function (e) {
+
+                if ($('#newsletter-email').val().trim() == '') {
+                    toastr.warning('The <strong>NewsLetter Email</strong> is required!', 'Validation Warning!');
+                    return;
+                }
+
+                if (!isNewsLetterEmail($('#newsletter-email').val().trim())) {
+                    toastr.warning('The <strong>NewsLetter Email</strong> is invalid!', 'Validation Warning!');
+                    return;
+                }
+
+
+                $.post(newsletterBaseUrl + 'api/NewsLetter/AddNewsLetter',
+                    {
+                        Email: $("#newsletter-email").val()
+                    })
+                    .done(function () {
+                        $("#newsletter-form").trigger('reset');
+                        toastr.success('The <strong>NewsLetter</strong> record has been successfully added.', 'Record Added.');
+                    })
+                    .fail(function (xhr) {
+                        if (xhr.status == 400) {
+                            toastr.error('The <strong>NewsLetter</strong> saving failed due to: ' + xhr.responseText, 'Record Add Failed.');
+                        }
+                        else {
+                            var err = eval("(" + xhr.responseText + ")");
+                            toastr.error('The <strong>NewsLetter</strong> saving failed due to: ' + err.Message, 'Record Add Failed.');
+                        }
+
+                    });
+
+                e.preventDefault();
+
+            });
+            // -- END OF ADD NEWSLETTER ---
+
+        });
+</script>
+
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@*<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>@ViewBag.Title - My ASP.NET Application</title>
+        @Styles.Render("~/Content/css")
+        @Scripts.Render("~/bundles/modernizr")
+
+    </head>
+    <body>
+        <div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                        <li>@Html.ActionLink("About", "About", "Home")</li>
+                        <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                    </ul>
+                    @Html.Partial("_LoginPartial")
+                </div>
+            </div>
+        </div>
+        <div class="container body-content">
+            @RenderBody()
+            <hr />
+            <footer>
+                <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+            </footer>
+        </div>
+
+        @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/bootstrap")
+        @RenderSection("scripts", required: false)
+    </body>
+    </html>*@

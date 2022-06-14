@@ -1,0 +1,89 @@
+﻿@model AspMVCECommerce.Models.IndexViewModel
+@{
+    ViewBag.Title = "Manage";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<!-- BREADCRUMB -->
+<div id="breadcrumb" class="section">
+    <!-- container -->
+    <div class="container">
+        <!-- row -->
+        <div class="row">
+            <div class="col-md-12">
+                <h3 class="breadcrumb-header">Manage Account</h3>
+                <ul class="breadcrumb-tree">
+                    <li><a href="~/Home/Index">Home</a></li>
+                    <li class="active">Manage Account</li>
+                </ul>
+
+                <ul class="breadcrumb-tree pull-right">
+                    <li> <a href="~/Home/Index" title="Home">Back to Home</a></li>
+                </ul>
+            </div>
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /container -->
+</div>
+<!-- /BREADCRUMB -->
+<!-- SECTION -->
+<div class="section">
+    <!-- container -->
+    <div class="container">
+        <!-- row -->
+        <div class="row">
+
+            <div class="col-md-12">
+                <h2>@ViewBag.Title.</h2>
+
+                <p class="text-success">@ViewBag.StatusMessage</p>
+                <div>
+                    <h4>Change your account settings</h4>
+                    <hr />
+                    <dl class="dl-horizontal">
+                        <dt>Password:</dt>
+                        <dd>
+                            [
+                            @if (Model.HasPassword)
+                            {
+                                @Html.ActionLink("Change your password", "ChangePassword")
+                            }
+                            else
+                            {
+                                @Html.ActionLink("Create", "SetPassword")
+                            }
+                            ]
+                        </dd>
+
+                        @if (Request.IsAuthenticated)
+                        {
+                            if (User.IsInRole("Admin"))
+                            {
+                                <dt>Roles:</dt>
+                                <dd>
+                                    <a href="/Account/RegisterRole?Length=7">[ Change Assigned Role ]</a>
+                                </dd>
+                            }
+                        }
+
+
+
+                    </dl>
+                </div>
+
+
+            </div>
+
+
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /container -->
+
+</div>
+<!-- /SECTION -->
+
+

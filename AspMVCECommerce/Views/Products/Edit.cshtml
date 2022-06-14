@@ -1,0 +1,1004 @@
+﻿@model AspMVCECommerce.ViewModel.ProductViewModel
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+<!-- BREADCRUMB -->
+<div id="breadcrumb" class="section">
+    <!-- container -->
+    <div class="container">
+        <!-- row -->
+        <div class="row">
+            <div class="col-md-12">
+                <h3 class="breadcrumb-header">Manage Product</h3>
+                <ul class="breadcrumb-tree">
+                    <li><a href="~/Home/Index">Home</a></li>
+                    <li><a href="~/Products/Index">Products</a></li>
+                    <li>Edit</li>
+                    <li class="active">Id: @Html.DisplayFor(model => model.ProductId)</li>
+                </ul>
+
+                <ul class="breadcrumb-tree pull-right">
+                    <li> @Html.ActionLink("Back to List", "Index")</li>
+                </ul>
+            </div>
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /container -->
+</div>
+<!-- /BREADCRUMB -->
+
+
+<!-- SECTION -->
+<div class="section">
+    <!-- container -->
+    <div class="container">
+        <!-- row -->
+        <div class="row">
+
+            <div class="col-md-12">
+
+                @using (Html.BeginForm("Edit", "Products", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                <div class="form-horizontal">
+
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @Html.HiddenFor(model => model.ProductId)
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-controlx" } })
+                            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @*@Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })*@
+                            @Html.TextAreaFor(model => model.Description, new { @class = "form-control", @rows = 4 })
+                            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Details, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @*@Html.EditorFor(model => model.Details, new { htmlAttributes = new { @class = "form-control" } })*@
+                            @Html.TextAreaFor(model => model.Details, new { @class = "form-control", @rows = 4 })
+                            @Html.ValidationMessageFor(model => model.Details, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.OriginalPrice, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.OriginalPrice, new { htmlAttributes = new { @class = "form-controlx" } })
+                            @Html.ValidationMessageFor(model => model.OriginalPrice, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.PromoSaleOFF, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            <div class="row" style="display: flex; margin-right:0px; margin-left: 0px; ">
+                                @Html.EditorFor(model => model.PromoSaleOFF, new { htmlAttributes = new { @class = "form-controlx promosale" } })
+                                <label id="PromoSaleOFFPercent" for="PromoSaleOFF" style="padding-left: 6px; padding-top: 7px;"></label>
+                            </div>
+
+                            @Html.ValidationMessageFor(model => model.PromoSaleOFF, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="PromoDurationDiv" hidden>
+                        <label class="control-label col-md-2" for="PromoSaleStartDateTime">Promo Sale Duration</label>
+                        <div class="col-md-10">
+
+
+                            <div class="container" style="padding-left:0px">
+                                <div class='col-md-4' style="padding-left:0px">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3" for="PromoSaleStartDateTime" style="text-align: left; width: auto;">Start Date:</label>
+                                        <div class='input-group date' id='datetimepicker6'>
+
+
+                                            <input type='text' class="form-controlx" id='PromoSaleStartDateTime' name="PromoSaleStartDateTime" />
+                                            <span class="input-group-addon" style="border: 1px solid #E4E7ED !important; border-radius: 0px !important;">
+                                                <span class="glyphicon glyphicon-calendar"></span>
+                                            </span>
+                                        </div>
+
+                                        @Html.ValidationMessageFor(model => model.PromoSaleStartDateTime, "", new { @class = "text-danger  col-md-offset-3", @Style = "padding-left:8px;" })
+                                    </div>
+                                </div>
+                                <div class='col-md-4' style="padding-left:0px">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3" for="PromoSaleEndDateTime" style="text-align: left; width: auto;">End Date:</label>
+                                        <div class='input-group date' id='datetimepicker7'>
+
+                                            <input type='text' class="form-controlx" id='PromoSaleEndDateTime' name="PromoSaleEndDateTime" />
+                                            <span class="input-group-addon" style="border: 1px solid #E4E7ED !important; border-radius: 0px !important;">
+                                                <span class="glyphicon glyphicon-calendar"></span>
+                                            </span>
+                                        </div>
+                                        @Html.ValidationMessageFor(model => model.PromoSaleEndDateTime, "", new { @class = "text-danger   col-md-offset-3" })
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DiscountedPrice, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.DiscountedPrice, new { htmlAttributes = new { @class = "form-controlx" } })
+                            @Html.ValidationMessageFor(model => model.DiscountedPrice, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Stock, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Stock, new { htmlAttributes = new { @class = "form-controlx" } })
+                            @Html.ValidationMessageFor(model => model.Stock, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @*@Html.LabelFor(model => model.CategoryId, "CategoryId", htmlAttributes: new { @class = "control-label col-md-2" })*@
+
+                        <label class="control-label col-md-2" for="CategoryId">Category</label>
+                        <div class="col-md-10">
+                            @Html.DropDownList("CategoryId", null, htmlAttributes: new { @class = "form-controlx" })
+                            @Html.ValidationMessageFor(model => model.CategoryId, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+
+
+                        <label class="control-label col-md-2" for="BrandId">Brand</label>
+                        <div class="col-md-10">
+                            @Html.DropDownList("BrandId", null, htmlAttributes: new { @class = "form-controlx" })
+                            @Html.ValidationMessageFor(model => model.BrandId, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2" for="list-group-size">Sizes</label>
+                        <div class="col-md-4">
+                            <div class="row">
+                                <div class="col-md-9" style="margin-right: 0px; padding-right: 0px;padding-right:5px;">
+                                    <input class="form-controlx text-box single-line" placeholder="Enter size here" maxlength="29" data-val="true" id="size-textbox" name="size-textbox" type="text" value="">
+                                    <p class="text-danger" id="size-textbox-validation" hidden>Size input cannot be empty!</p>
+                                    <p class="text-danger" id="size-textbox-validation-duplicate" hidden>Size already exist!</p>
+                                </div>
+                                <div class="col-md-3" style="padding-left: 0px; margin-left: 0px;">
+                                    <a href="javascript:void(0)" id="add-size-link" class="btn-default btnx" style="width: 100%; height: 40px; padding-top: 5px; ">Add</a>
+                                </div>
+                            </div>
+
+                            <div style="margin-top:5px;width: 100%; height: 166px; overflow: scroll; border: 1px solid #E4E7ED; overflow-x: hidden; ">
+                                <ul class="list-group" id="list-group-size" style="margin-bottom: 0px;border: 0px ">
+                                </ul>
+
+                                <div hidden id="size-list-container">
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2" for="list-group-color">Colors</label>
+                        <div class="col-md-4">
+                            <div class="row">
+                                <div class="col-md-9" style="margin-right: 0px; padding-right: 0px;padding-right:5px;">
+                                    <input class="form-controlx text-box single-line" placeholder="Enter color here" maxlength="29" data-val="true" id="color-textbox" name="color-textbox" type="text" value="">
+                                    <p class="text-danger" id="color-textbox-validation" hidden>Color input cannot be empty!</p>
+                                    <p class="text-danger" id="color-textbox-validation-duplicate" hidden>Color already exist!</p>
+                                </div>
+                                <div class="col-md-3" style="padding-left: 0px; margin-left: 0px;">
+                                    <a href="javascript:void(0)" id="add-color-link" class="btn-default btnx" style="width: 100%; height: 40px; padding-top: 5px; ">Add</a>
+                                </div>
+                            </div>
+
+                            <div style="margin-top:5px;width: 100%; height: 166px; overflow: scroll; border: 1px solid #E4E7ED; overflow-x: hidden; ">
+                                <ul class="list-group" id="list-group-color" style="margin-bottom: 0px;border: 0px ">
+                                </ul>
+                                <div hidden id="color-list-container">
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+
+
+
+
+
+
+
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2" for="CreatedDateTime">Created Date Time:</label>
+                        <div class="col-md-10">
+                            <div class='input-group date' id='dtpCreatedDateTime'>
+                                <input type='text' class="form-controlx" id='CreatedDateTime' name="CreatedDateTime" value="@Model.CreatedDateTime" required />
+                                <span class="input-group-addon" style="border: 1px solid #E4E7ED !important; border-radius: 0px !important;">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+
+                            @Html.ValidationMessageFor(model => model.CreatedDateTime, "", new { @class = "text-danger" })
+                        </div>
+
+
+
+                    </div>
+
+
+
+                    <!-- Thumbnail gallery for product images -->
+                    <div class="form-group">
+                        <label class="control-label col-md-2" for="">Images</label>
+                        <div class="col-md-10">
+
+                            <center>
+
+                                <div class="scroll">
+                                    <div class="row" style="margin-right:0px; margin-left: 0px;">
+
+                                        @for (int i = 0; i < Model.Images.Count; i++)
+                                        {
+
+
+
+
+                                            <div class="col-md-3" name="@("Images[" + i.ToString() + "]")" style="padding: 4px; margin: 10px;">
+                                                <div class="thumbnailx" style="height: 300px;width:230px;">
+                                                    <a href="@Url.Content(Model.Images[i].ImagePath)">
+
+                                                        <img src="@Url.Content(Model.Images[i].ImagePath)"
+                                                             alt="Lights">
+
+
+                                                        <div class="caption">
+
+
+
+                                                            <input type="hidden" id="@("Images[" + i.ToString() + "]" + ".ImageId")" name="@("Images[" + i.ToString() + "]" + ".ImageId")" value="@Model.Images[i].ImageId">
+
+                                                            @if (Model.Images[i].Default.ToString() == "True")
+                                                            {
+                                                                <a href="javascript:void(0)" image-id="@("Images[" + i.ToString() + "]")" class="btnx btn-default btn-sm disabled IsImageDefault" style="line-height:18px !important;font-size:12px !important;height:30px;">Primary</a>
+                                                            }
+                                                            else
+                                                            {
+                                                                <a href="javascript:void(0)" image-id="@("Images[" + i.ToString() + "]")" class="btnx btn-primary btn-sm IsImageDefault" style="line-height:18px !important;font-size:12px !important;height:30px;">Set as Default</a>
+                                                            }
+
+                                                            <input type="hidden" id="@("Images[" + i.ToString() + "]" + ".Default")" name="@("Images[" + i.ToString() + "]" + ".Default")" value="@Model.Images[i].Default.ToString()">
+
+                                                            <a href="javascript:void(0)" image-id="@("Images[" + i.ToString() + "]")" class="btnx btn-danger btn-sm IsImageRemove" style="line-height:18px !important;font-size:12px !important;height:30px;">Remove</a>
+
+                                                            <input type="hidden" id="@("Images[" + i.ToString() + "]" + ".IsRemove")" name="@("Images[" + i.ToString() + "]" + ".IsRemove")" value="false">
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                            </div>
+
+                                        }
+
+
+
+
+                                    </div>
+                                </div>
+                            </center>
+
+
+                        </div>
+                    </div>
+
+                    <!-- End of Thumbnail gallery -->
+
+
+                    <div class="form-group">
+                        @*@Html.LabelFor(model => model.ImageFile, "ImageFile", htmlAttributes: new { @class = "control-label col-md-2" })*@
+
+                        <label class="control-label col-md-2" for="ImageFile">Upload Images</label>
+                        <div class="col-md-10">
+
+                            @*<input type="file" class="custom-file-input" id="ImageFile" name="ImageFile" multiple>*@
+
+
+
+                            <!--file input example -->
+
+                            <label class="btnx btn-primary" for="ImageFile" style="width:150px;height:40px;padding-top:5px;">
+                                <input id="ImageFile" type="file" style="display:none"
+                                       name="ImageFile" multiple accept="image/*">
+                                Choose Files
+                            </label>
+                            <span class='label label-info' id="upload-file-info" style="font-size:medium"></span>
+                            <!--./file input example -->
+
+
+
+
+
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Save" class="btnx btn-default" style="width: 150px; height: 40px;" />
+                        </div>
+                    </div>
+                </div>
+                }
+
+
+
+            </div>
+
+
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /container -->
+
+</div>
+<!-- /SECTION -->
+
+
+
+
+
+
+
+
+
+
+
+<link href="~/Content/summernote.min.css" rel="stylesheet">
+<link href="~/Content/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="~/Content/toastr.min.css">
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Scripts/summernote.min.js"></script>
+    <script src="~/Scripts/moment.min.js"></script>
+
+    <script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/toastr.min.js"></script>
+
+    <script type="text/javascript">
+
+        Date.prototype.addDays = function (days) {
+            var date = new Date(this.valueOf());
+            date.setDate(date.getDate() + days);
+            return date;
+        }
+
+
+
+         // UPDATE SIZE HIDDEN INPUT ID INDEX
+        function UpdateSizeHiddenInputIndex() {
+            const sizeHiddenInputIdList = [];
+            $('#size-list-container input').each(function (index) {
+                var hiddenInputSizeClass = $(this).attr('class');
+                if ($.inArray(hiddenInputSizeClass, sizeHiddenInputIdList) == -1) {
+                    sizeHiddenInputIdList.push(hiddenInputSizeClass);
+                }
+            });
+
+            $.each(sizeHiddenInputIdList, function (index, value) {
+                var sizeHiddenIndex = index;
+
+                $('.' + value).each(function () {
+
+                    if ($(this).attr('id').indexOf('.Name') > -1) {
+                        $(this).attr("id", "Sizes[" + sizeHiddenIndex.toString() + "].Name");
+                        $(this).attr("name", "Sizes[" + sizeHiddenIndex.toString() + "].Name");
+                    }
+                    else if ($(this).attr('id').indexOf('.SizeId') > -1) {
+                        $(this).attr("id", "Sizes[" + sizeHiddenIndex.toString() + "].SizeId");
+                        $(this).attr("name", "Sizes[" + sizeHiddenIndex.toString() + "].SizeId");
+                    }
+                    else if ($(this).attr('id').indexOf('.Deleted') > -1) {
+                        $(this).attr("id", "Sizes[" + sizeHiddenIndex.toString() + "].Deleted");
+                        $(this).attr("name", "Sizes[" + sizeHiddenIndex.toString() + "].Deleted");
+                    }
+                    else if ($(this).attr('id').indexOf('.ProductId') > -1) {
+                        $(this).attr("id", "Sizes[" + sizeHiddenIndex.toString() + "].ProductId");
+                        $(this).attr("name", "Sizes[" + sizeHiddenIndex.toString() + "].ProductId");
+                    }
+                });
+            });
+
+        }
+        // END OF UPDATE SIZE HIDDEN INPUT ID INDEX
+
+
+
+        function AddSizeToList(sizeName, sizeId, sizeIsDeleted, productId) {
+            var sizeListBoxUniqueId = new Date().toISOString().replace("-", "").replace("-", "").replace(":", "").replace(":", "").replace(".", "") + sizeId.toString();
+            var sizeListBoxItemTemplate = '<li id="size-list-item-' + sizeListBoxUniqueId + '" class="list-group-item d-flex justify-content-between align-items-center">' +
+                sizeName +
+                '<a href="javascript:void(0)" id="size-list-item-remove-' + sizeListBoxUniqueId + '" class="pull-right list-group-item-remove list-group-item-remove-size" >Remove</a >' +
+                '</li >';
+
+            $("#list-group-size").append(sizeListBoxItemTemplate);
+
+            $("#size-list-container").append('<input class="size-list-item-hidden-' + sizeListBoxUniqueId + '" type="hidden" id="Sizes[0].Name" name="Sizes[0].Name" value="' + sizeName + '">');
+            $("#size-list-container").append('<input class="size-list-item-hidden-' + sizeListBoxUniqueId + '" type="hidden" id="Sizes[0].SizeId" name="Sizes[0].SizeId" value="' + sizeId + '">');
+            $("#size-list-container").append('<input class="size-list-item-hidden-' + sizeListBoxUniqueId + '" type="hidden" id="Sizes[0].Deleted" name="Sizes[0].Deleted" value="' + sizeIsDeleted + '">');
+            $("#size-list-container").append('<input class="size-list-item-hidden-' + sizeListBoxUniqueId + '" type="hidden" id="Sizes[0].ProductId" name="Sizes[0].ProductId" value="' + productId + '">');
+
+
+            $(".list-group-item-remove-size").click(function () {
+                var sizeListItemId = $(this).attr("id").replace("remove-", "");
+                var sizeListHiddenItemId = $(this).attr("id").replace("remove-", "hidden-");
+                $("#" + sizeListItemId).remove();
+                $("." + sizeListHiddenItemId).remove();
+
+                UpdateSizeHiddenInputIndex();
+            });
+
+
+            $("#size-textbox").val("");
+
+            // UPDATE SIZE HIDDEN INPUT ID INDEX
+            UpdateSizeHiddenInputIndex();
+            // END OF UPDATE SIZE HIDDEN INPUT ID INDEX
+        }
+
+
+
+
+
+        // UPDATE COLOR HIDDEN INPUT ID INDEX
+        function UpdateColorHiddenInputIndex() {
+            const colorHiddenInputIdList = [];
+            $('#color-list-container input').each(function (index) {
+                var hiddenInputColorClass = $(this).attr('class');
+                if ($.inArray(hiddenInputColorClass, colorHiddenInputIdList) == -1) {
+                    colorHiddenInputIdList.push(hiddenInputColorClass);
+                }
+            });
+
+            $.each(colorHiddenInputIdList, function (index, value) {
+                var colorHiddenIndex = index;
+
+                $('.' + value).each(function () {
+
+                    if ($(this).attr('id').indexOf('.Name') > -1) {
+                        $(this).attr("id", "Colors[" + colorHiddenIndex.toString() + "].Name");
+                        $(this).attr("name", "Colors[" + colorHiddenIndex.toString() + "].Name");
+                    }
+                    else if ($(this).attr('id').indexOf('.ColorId') > -1) {
+                        $(this).attr("id", "Colors[" + colorHiddenIndex.toString() + "].ColorId");
+                        $(this).attr("name", "Colors[" + colorHiddenIndex.toString() + "].ColorId");
+                    }
+                    else if ($(this).attr('id').indexOf('.Deleted') > -1) {
+                        $(this).attr("id", "Colors[" + colorHiddenIndex.toString() + "].Deleted");
+                        $(this).attr("name", "Colors[" + colorHiddenIndex.toString() + "].Deleted");
+                    }
+                    else if ($(this).attr('id').indexOf('.ProductId') > -1) {
+                        $(this).attr("id", "Colors[" + colorHiddenIndex.toString() + "].ProductId");
+                        $(this).attr("name", "Colors[" + colorHiddenIndex.toString() + "].ProductId");
+                    }
+                });
+            });
+
+        }
+        // END OF UPDATE COLOR HIDDEN INPUT ID INDEX
+
+
+
+        function AddColorToList(colorName, colorId, colorIsDeleted, productId) {
+            var colorListBoxUniqueId = new Date().toISOString().replace("-", "").replace("-", "").replace(":", "").replace(":", "").replace(".", "") + colorId.toString();
+            var colorListBoxItemTemplate = '<li id="color-list-item-' + colorListBoxUniqueId + '" class="list-group-item d-flex justify-content-between align-items-center">' +
+                colorName +
+                '<a href="javascript:void(0)" id="color-list-item-remove-' + colorListBoxUniqueId + '" class="pull-right list-group-item-remove list-group-item-remove-color" >Remove</a >' +
+                '</li >';
+
+            $("#list-group-color").append(colorListBoxItemTemplate);
+
+            $("#color-list-container").append('<input class="color-list-item-hidden-' + colorListBoxUniqueId + '" type="hidden" id="Colors[0].Name" name="Colors[0].Name" value="' + colorName + '">');
+            $("#color-list-container").append('<input class="color-list-item-hidden-' + colorListBoxUniqueId + '" type="hidden" id="Colors[0].ColorId" name="Colors[0].ColorId" value="' + colorId + '">');
+            $("#color-list-container").append('<input class="color-list-item-hidden-' + colorListBoxUniqueId + '" type="hidden" id="Colors[0].Deleted" name="Colors[0].Deleted" value="' + colorIsDeleted + '">');
+            $("#color-list-container").append('<input class="color-list-item-hidden-' + colorListBoxUniqueId + '" type="hidden" id="Colors[0].ProductId" name="Colors[0].ProductId" value="' + productId + '">');
+
+
+            $(".list-group-item-remove-color").click(function () {
+                var colorListItemId = $(this).attr("id").replace("remove-", "");
+                var colorListHiddenItemId = $(this).attr("id").replace("remove-", "hidden-");
+                $("#" + colorListItemId).remove();
+                $("." + colorListHiddenItemId).remove();
+
+                UpdateColorHiddenInputIndex();
+            });
+
+
+            $("#color-textbox").val("");
+
+            // UPDATE COLOR HIDDEN INPUT ID INDEX
+            UpdateColorHiddenInputIndex();
+            // END OF UPDATE COLOR HIDDEN INPUT ID INDEX
+        }
+
+
+
+
+        $(document).ready(function () {
+            // ------ Initialize summernote -----
+            $('#Description').summernote({
+                height: 150,   //set editable area's height
+            });
+            $('#Details').summernote({
+                height: 150,   //set editable area's height
+            });
+
+
+            //$('form').each(function () {
+            //    if ($(this).data('validator'))
+            //        $(this).data('validator').settings.ignore = ".note-editor *";
+            //});
+
+
+
+
+            // Display an info toast with no title
+            toastr.options = {
+                "closeButton": false,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": true,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "1000",
+                "hideDuration": "1000",
+                "timeOut": "10000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            }
+
+
+            // ------ For Promo Duration DateTime Picker
+            var currentDateTime = new Date().toLocaleString();
+            var add30Days = new Date().addDays(30).toLocaleString();
+
+            $('#PromoSaleStartDateTime').val(currentDateTime);
+            $('#PromoSaleEndDateTime').val(add30Days);
+            $('#datetimepicker6').datetimepicker();
+            $('#datetimepicker6').data("DateTimePicker").minDate(currentDateTime);
+
+            $('#datetimepicker7').datetimepicker({
+                useCurrent: false //Important! See issue #1075
+            });
+            $('#datetimepicker7').data("DateTimePicker").minDate(currentDateTime);
+
+            $("#datetimepicker6").on("dp.change", function (e) {
+                $('#datetimepicker7').data("DateTimePicker").minDate(e.date);
+
+                var add30DaysToEndDate = new Date(e.date).addDays(30).toLocaleString();
+
+                $('#PromoSaleEndDateTime').val(add30DaysToEndDate);
+            });
+            $("#datetimepicker7").on("dp.change", function (e) {
+
+                $('#datetimepicker6').data("DateTimePicker").maxDate(e.date);
+
+
+            });
+            // ------- End of Promo Duration DateTime Picker
+
+
+            //$('#PromoSaleStartDateTime').val(currentDateTime);
+
+            $('#dtpCreatedDateTime').datetimepicker();
+
+
+
+
+            $("#ImageFile").change(function () {
+                var filenames = this.files.length + " files selected";
+
+                for (var i = 0; i < this.files.length; i++) {
+                    if (!(document.getElementById("ImageFile").files[i].type.match(/image.*/))) {
+
+
+                        $('#upload-file-info')
+                            .removeClass("label-info")
+                            .addClass("label-danger")
+                            .text('You can\'t upload this type of file [' + this.files[i].name + '].');
+
+                        document.getElementById('ImageFile').value = null;
+                        return;
+                    }
+                }
+
+
+
+                $('#upload-file-info')
+                    .removeClass("label-danger")
+                    .addClass("label-info")
+                    .text(filenames);
+
+            });
+
+
+
+            // FOR UPDATE STATUS ALERT MESSAGE
+            @if(ViewData["Success"] != null) {
+
+               <text>
+                    var jsTempDataSuccess = '@ViewData["Success"].ToString()';
+               </text>
+
+                if (ViewData["Success"].ToString() == "TRUE")
+                {
+                    @:toastr.success('The <strong>Product</strong> record has been successfully updated.', 'Record Updated.');
+                }
+                else
+                {
+                     @:toastr.error('The <strong>Product</strong> updating failed to save due to: ' + jsTempDataSuccess , 'Record Update Failed.');
+                }
+            }
+
+            // FOR Promo Sale OFF Percentage value label
+
+            //$('#PromoSaleOFFPercent').text("0% OFF");
+            //if ($("#PromoSaleOFF").val() != '') {
+            //    var percentText1 = parseInt(parseFloat($("#PromoSaleOFF").val()) * 100).toString() + "% OFF";
+            //    $('#PromoSaleOFFPercent').text(percentText1);
+            //}
+
+            //$('#PromoSaleOFF').on('input', function (e) {
+            //    if (this.value != '') {
+            //        var percentText = parseInt(parseFloat(this.value) * 100).toString() + "% OFF";
+            //        $('#PromoSaleOFFPercent').text(percentText);
+            //    }
+            //});
+
+
+            // FOR PROMO SALE DURATION VALUE
+            @if(Model.PromoSaleOFF != null) {
+
+                if (Model.PromoSaleOFF > 0)
+                {
+                    <text>
+                        var promoSaleStartDateTime = '@Model.PromoSaleStartDateTime';
+                        var promoSaleEndDateTime = '@Model.PromoSaleEndDateTime';
+                        $('#PromoSaleStartDateTime').val(promoSaleStartDateTime);
+                        $('#PromoSaleEndDateTime').val(promoSaleEndDateTime);
+                    </text>
+                }
+
+            }
+
+
+
+
+            $('#PromoSaleOFFPercent').text("0% OFF");
+            if ($("#PromoSaleOFF").val() != '') {
+                var percentText1 = parseInt(parseFloat($("#PromoSaleOFF").val()) * 100).toString() + "% OFF";
+                $('#PromoSaleOFFPercent').text(percentText1);
+
+                if (parseFloat($("#PromoSaleOFF").val()) > 0 && parseFloat($("#PromoSaleOFF").val()) <= 1) {
+                    $("#PromoDurationDiv").show();
+
+                    //zaldy
+                    $("#PromoSaleStartDateTime").prop('required', true);
+                    $("#PromoSaleEndDateTime").prop('required', true);
+                }
+                else {
+                    $("#PromoDurationDiv").hide();
+
+                    //zaldy
+                    $("#PromoSaleStartDateTime").prop('required', false);
+                    $("#PromoSaleEndDateTime").prop('required', false);
+                }
+            }
+
+
+
+
+            $('#PromoSaleOFF').on('input', function (e) {
+                if (this.value != '') {
+                    var percentText = parseInt(parseFloat(this.value) * 100).toString() + "% OFF";
+                    $('#PromoSaleOFFPercent').text(percentText);
+                    if (parseFloat(this.value) > 0 && parseFloat(this.value) <= 1) {
+                        $("#PromoDurationDiv").show();
+
+                        //zaldy
+                        $("#PromoSaleStartDateTime").prop('required', true);
+                        $("#PromoSaleEndDateTime").prop('required', true);
+
+
+                        var discountedPrice = parseInt($('#OriginalPrice').val()) - (parseInt($('#OriginalPrice').val()) * parseFloat(this.value));
+                        $('#DiscountedPrice').val(Math.round(discountedPrice).toString());
+
+                        $("#DiscountedPrice").attr("disabled", false);
+                        $("#DiscountedPrice").attr("style", "background-color: white;");
+
+                    }
+                    else {
+                        $("#PromoDurationDiv").hide();
+
+                        $("#DiscountedPrice").val("");
+                        $("#DiscountedPrice").attr("disabled", true);
+                        $("#DiscountedPrice").attr("style", "background-color: #E4E7ED;");
+                        //zaldy
+                        $("#PromoSaleStartDateTime").prop('required', false);
+                        $("#PromoSaleEndDateTime").prop('required', false);
+                    }
+                }
+                else {
+                    $("#PromoDurationDiv").hide();
+
+                    //zaldy
+                    $("#PromoSaleStartDateTime").prop('required', false);
+                    $("#PromoSaleEndDateTime").prop('required', false);
+
+                    $('#PromoSaleOFFPercent').text("0% OFF");
+
+
+                    $("#DiscountedPrice").val("");
+                    $("#DiscountedPrice").attr("disabled", true);
+                    $("#DiscountedPrice").attr("style", "background-color: #E4E7ED;");
+                }
+            });
+
+
+            $("#DiscountedPrice").prop('min', 0);
+            $("#DiscountedPrice").prop('max', parseInt($('#OriginalPrice').val()));
+            $('#OriginalPrice').on('input', function (e) {
+                if (this.value != '') {
+
+
+
+                    if (this.value > 0) {
+                        //$("#DiscountedPrice").attr("disabled", false);
+                        //$("#DiscountedPrice").attr("style", "background-color: white;");
+
+
+                        $("#DiscountedPrice").prop('min', 0);
+                        $("#DiscountedPrice").prop('max', parseInt(this.value));
+
+
+                        $("#PromoSaleOFF").attr("disabled", false);
+                        $("#PromoSaleOFF").attr("style", "background-color: white;");
+                    }
+                    else {
+
+                        $("#DiscountedPrice").attr("disabled", true);
+                        $("#DiscountedPrice").attr("style", "background-color: #E4E7ED;");
+
+                        $("#PromoSaleOFF").attr("disabled", true);
+                        $("#PromoSaleOFF").attr("style", "background-color: #E4E7ED;");
+                    }
+                }
+                else {
+                    $("#DiscountedPrice").attr("disabled", true);
+                    $("#DiscountedPrice").attr("style", "background-color: #E4E7ED;");
+
+                    $("#PromoSaleOFF").attr("disabled", true);
+                    $("#PromoSaleOFF").attr("style", "background-color: #E4E7ED;");
+                }
+            });
+
+
+            $('#DiscountedPrice').on('input', function (e) {
+                if (this.value != '') {
+
+                    var _discountedPrice = parseInt(parseFloat(this.value) * 100);
+                    var _origPrice = parseInt($('#OriginalPrice').val());
+                    if (_discountedPrice > _origPrice) {
+                        //$("#DiscountedPrice").attr("disabled", false);
+                        //$("#DiscountedPrice").attr("style", "background-color: white;");
+
+                        return false;
+                    }
+
+                }
+
+            });
+            if ($("#DiscountedPrice").val() != '') {
+                if (parseInt($("#DiscountedPrice").val()) > 0) {
+                    $("#DiscountedPrice").attr("disabled", false);
+                    $("#DiscountedPrice").attr("style", "background-color: white;");
+
+                    $("#PromoSaleOFF").attr("disabled", false);
+                    $("#PromoSaleOFF").attr("style", "background-color: white;");
+                }
+                else {
+                    $("#DiscountedPrice").attr("disabled", true);
+                    $("#DiscountedPrice").attr("style", "background-color: #E4E7ED;");
+
+                    //$("#PromoSaleOFF").attr("disabled", true);
+                    //$("#PromoSaleOFF").attr("style", "background-color: #E4E7ED;");
+                }
+            }
+            else {
+                $("#DiscountedPrice").attr("disabled", true);
+                $("#DiscountedPrice").attr("style", "background-color: #E4E7ED;");
+
+                $("#PromoSaleOFF").attr("disabled", true);
+                $("#PromoSaleOFF").attr("style", "background-color: #E4E7ED;");
+            }
+
+
+
+
+
+
+            $(".IsImageDefault").click(function (e) {
+                var button = $(e.target);
+                var imageId = button.attr("image-id") + ".Default";
+
+
+                $(".IsImageDefault").each(function (index) {
+                    var imageDefaultId = $(this).attr("image-id") + ".Default";
+
+                    if ($(this).attr("class").indexOf("disabled") > -1) {
+                        $(this).removeClass("disabled")
+                            .removeClass("btn-default")
+                            .addClass("btn-primary")
+                            .text("Set as Default");
+
+                        $('input[name="' + imageDefaultId + '"]').val(false);
+
+                    };
+
+
+                });
+
+
+                button.removeClass("btn-primary")
+                    .addClass("btn-default")
+                    .addClass("disabled")
+                    .text("Primary");
+
+                $('input[name="' + imageId + '"]').val(true);
+
+            });
+
+            $(".IsImageRemove").click(function (e) {
+                var imageId = $(this).attr("image-id");
+
+                $('div[name="' + imageId + '"]').hide();
+
+                $('input[name="' + imageId + ".IsRemove" + '"]').val(true);
+
+            });
+
+
+
+            // REMOVE HTML ELEMENT FROM HTMLSTRING
+            $.strRemove = function (theTarget, theString) {
+                return $("<div/>").append(
+                    $(theTarget, theString).remove().end()
+                ).html();
+            };
+
+            // Add size to list group
+            $("#add-size-link").click(function () {
+                $("#size-textbox-validation").hide();
+                $("#size-textbox-validation-duplicate").hide();
+
+                if ($("#size-textbox").val().trim() == "") {
+                    $("#size-textbox-validation").show();
+                    return;
+                }
+                var duplicateSizeExist = false;
+                $("#list-group-size li").each(function () {
+
+                    var tempSizeListHtmlString = '<div>' + $(this).html() + '</div>';
+                    var tempSizeListHtmlStringResult = $.strRemove("a", tempSizeListHtmlString);
+
+                    if ($("#size-textbox").val().toUpperCase().trim() == $(tempSizeListHtmlStringResult).text().toUpperCase().trim()) {
+                        $("#size-textbox-validation-duplicate").show();
+                        duplicateSizeExist = true;
+                        return;
+                    }
+
+                })
+
+                if (duplicateSizeExist) { return; }
+
+                AddSizeToList($("#size-textbox").val(), 0, false, 0);
+            });
+            // end of add size to list group
+
+            // LOAD SIZES FROM VIEWMODEL
+            @if(Model.Sizes.Count > 0)
+            {
+                for(int i = 0; i < Model.Sizes.Count; i++)
+                {
+                    <text>
+                        AddSizeToList('@Model.Sizes[i].Name', parseInt('@Model.Sizes[i].SizeId'), '@Model.Sizes[i].Deleted', parseInt('@Model.Sizes[i].ProductId'));
+                    </text>
+                }
+            }
+
+            // END OF LOAD SIZES FROM VIEW MODEL
+
+
+
+
+            // Add color to list group
+            $("#add-color-link").click(function () {
+                $("#color-textbox-validation").hide();
+                $("#color-textbox-validation-duplicate").hide();
+
+                if ($("#color-textbox").val().trim() == "") {
+                    $("#color-textbox-validation").show();
+                    return;
+                }
+                var duplicateColorExist = false;
+                $("#list-group-color li").each(function () {
+
+                    var tempColorListHtmlString = '<div>' + $(this).html() + '</div>';
+                    var tempColorListHtmlStringResult = $.strRemove("a", tempColorListHtmlString);
+
+
+                    if ($("#color-textbox").val().toUpperCase().trim() == $(tempColorListHtmlStringResult).text().toUpperCase().trim()) {
+                        $("#color-textbox-validation-duplicate").show();
+                        duplicateColorExist = true;
+                        return;
+                    }
+
+                })
+
+                if (duplicateColorExist) { return; }
+
+
+                AddColorToList($("#color-textbox").val(), 0, false, 0);
+            });
+            // end of add color to list group
+
+
+            // LOAD COLORS FROM VIEWMODEL
+            @if(Model.Colors.Count > 0)
+            {
+                for(int i = 0; i < Model.Colors.Count; i++)
+                {
+                    <text>
+                        AddColorToList('@Model.Colors[i].Name', parseInt('@Model.Colors[i].ColorId'), '@Model.Colors[i].Deleted', parseInt('@Model.Colors[i].ProductId'));
+                    </text>
+                }
+            }
+
+            // END OF LOAD COLORS FROM VIEW MODEL
+
+        });
+
+    </script>
+}
