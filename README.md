@@ -6,7 +6,7 @@
 <li>Update web.config appsettings change the BaseUrl value base on your page url ex. <b>value="https://localhost:44372/"</b></li>
 </ul>
 
-<h3>Admin Account</h3><br/>
+<h3>Admin Account</h3>
 <ul>
 <li>username: <b>admin</b></li>
 <li>password: <b>123456</b></li>
