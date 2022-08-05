@@ -1,4 +1,4 @@
-# AspMVCECommerce
+# Zaldy's E-Commerce Web Application
 <h3>Project Setup</h3>
 <ul>
   <li>Change connection string in web.config base on your database credentials</li>
