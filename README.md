@@ -4,7 +4,7 @@
 <li>Change connection string in <b>web.config</b> base on your database credentials</li>
 <li>Run command in nuget console <b>"update-database"</b></li>
 <li>Open nuget package manager console then <b>restore packages</b></li>
-<li>Update web.config appsettings change the BaseUrl value base on your page url ex. <b>value="https://localhost:44372/"</b></li>
+<li>Update web.config <b>appSettings</b> change the <b>BaseUrl value</b> base on your page url ex. <b>value="https://localhost:44372/"</b></li>
 </ul>
 
 <h3>Admin Account</h3>
