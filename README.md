@@ -9,7 +9,6 @@
 <h3>Admin Account</h3><br/>
 <ul>
 <li>username: <b>admin</b></li>
-<li>run command in nuget console <b>"update-database"</b></li>
 <li>password: <b>123456</b></li>
 </ul>
 
