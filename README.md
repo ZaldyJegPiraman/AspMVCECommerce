@@ -1,9 +1,9 @@
 # Zaldy's E-Commerce Web Application
 <h3>Project Setup</h3>
 <ul>
-  <li>Change connection string in web.config base on your database credentials</li>
-<li>run command in nuget console <b>"update-database"</b></li>
-  <li>open nuget package manager console then restore packages</li>
+<li>Change connection string in <b>web.config</b> base on your database credentials</li>
+<li>Run command in nuget console <b>"update-database"</b></li>
+<li>Open nuget package manager console then <b>restore packages</b></li>
 <li>Update web.config appsettings change the BaseUrl value base on your page url ex. <b>value="https://localhost:44372/"</b></li>
 </ul>
 
