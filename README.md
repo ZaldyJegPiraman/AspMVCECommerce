@@ -14,6 +14,7 @@
 <li>password: <b>123456</b></li>
 </ul>
 
+<h3>For more info on how to use the website read help page </h3>
 
 
 
