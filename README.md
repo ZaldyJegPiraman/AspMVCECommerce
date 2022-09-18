@@ -19,5 +19,5 @@
 
 
 Admin Account<br/>
-username: admin<br/>
+username: admin@gmail.com<br/>
 password: 123456
