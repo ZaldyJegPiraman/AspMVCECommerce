@@ -10,14 +10,9 @@
 
 <h3>Admin Account</h3>
 <ul>
-<li>username: <b>admin</b></li>
+<li>username: <b>admin@gmail.com</b></li>
 <li>password: <b>123456</b></li>
 </ul>
 
 <h3>For more info on how to use the website read help page </h3>
 
-
-
-Admin Account<br/>
-username: admin@gmail.com<br/>
-password: 123456
